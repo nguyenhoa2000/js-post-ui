@@ -73,3 +73,17 @@ ul {
   height: 40px;
   width: auto;
 }
+
+.nav .nav__link {
+  text-decoration: none;
+}
+
+.nav .nav__link > i {
+  margin-right: 5px;
+
+}
+/* boottrap */
+.carousel-item img {
+  object-fit: cover;
+  height: 500px;
+}
