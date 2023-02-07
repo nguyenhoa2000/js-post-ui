@@ -7,4 +7,32 @@ const axiosClient = axios.create({
   },
 })
 
+// Thêm một bộ đón chặn request
+axiosClient.interceptors.request.use(
+  (config) => {
+
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      config.headers.Authorization = 'no access token'
+    }
+    return config
+  },
+  (error) => {
+    console.log(error)
+    return Promise.reject(error)
+  }
+)
+
+// Thêm một bộ đón chặn response
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response.data
+  },
+
+  (error) => {
+    console.error(error)
+    return Promise.reject(error)
+  }
+)
+
 export default axiosClient

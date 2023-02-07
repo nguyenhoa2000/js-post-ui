@@ -14,8 +14,8 @@ const main = async () => {
   }
 
   try {
-    const response = await postApi.addData(data1)
-    console.log(response.data)
+    const data = await postApi.getAll()
+    console.log(data)
   } catch (error) {
     console.log(error)
   }
