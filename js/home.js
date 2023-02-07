@@ -24,18 +24,18 @@ const renderPagination = (pagination) => {
 }
 
 const handleFilterChange = async (filterName, filterValue) => {
- try {
-  const url = new URL(window.location) // get url
-  url.searchParams.set(filterName, filterValue) //set params
-  window.history.pushState({}, '', url)
+  try {
+    const url = new URL(window.location) // get url
+    url.searchParams.set(filterName, filterValue) //set params
+    window.history.pushState({}, '', url)
 
-  // fetch api render posts
-  const { data, pagination } = await postApi.getAll(url.searchParams)
-  renderPosts(data)
-  renderPagination(pagination)
- } catch (err) {
-  console.error(err)
- }
+    // fetch api render posts
+    const { data, pagination } = await postApi.getAll(url.searchParams)
+    renderPosts(data)
+    renderPagination(pagination)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const initUrl = () => {
@@ -58,12 +58,11 @@ const handleNextClick = (e) => {
   e.preventDefault()
   const ulPagination = document.querySelector('#postsPagination')
   if (!ulPagination) return
-  const page = Number.parseInt(ulPagination.dataset.page) || 1 
+  const page = Number.parseInt(ulPagination.dataset.page) || 1
   const totalPages = Number.parseInt(ulPagination.dataset.totalPages)
   if (page >= totalPages) return
 
   handleFilterChange('_page', page + 1)
-
 }
 
 const handleEvenPagination = () => {
