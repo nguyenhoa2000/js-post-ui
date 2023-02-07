@@ -94,7 +94,7 @@ const createElement = (post) => {
 
   setThumbnail(liElement, '[data-id="thumbnail"]', post.imageUrl)
   setTextContent(liElement, '[data-id="title"]', post.title)
-  setTextContent(liElement, '[data-id="description"]', handleLengText(post.description, 100))
+  setTextContent(liElement, '[data-id="description"]', handleLengText(post.description, 80))
   setTextContent(liElement, '[data-id="author"]', post.author)
   setTextContent(liElement, '[data-id="timeSpan"]', `- ${dayjs(post.updatedAt).fromNow()}`)
 
