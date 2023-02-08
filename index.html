@@ -168,15 +168,24 @@
       <section class="posts-section">
         <div class="container">
           <h1 class="with-underline text-center">Latest posts</h1>
-
+          <!-- search box -->
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="search">Search</span>
+            <input
+              type="text"
+              id="search-input"
+              class="form-control"
+              placeholder="Search by post title"
+              aria-label="search"
+              aria-describedby="search"
+            />
+          </div>
           <!-- Posts list -->
-          <ul id="postList" class="row posts-list justify-content-center ps-0">
-           
-          </ul>
+          <ul id="postList" class="row posts-list justify-content-center ps-0"></ul>
 
           <!-- Posts pagination -->
           <nav class="posts-nav" aria-label="Posts navigation">
-            <ul  id="postsPagination" class="pagination justify-content-center">
+            <ul id="postsPagination" class="pagination justify-content-center">
               <li class="page-item">
                 <a class="page-link" href="#" aria-label="Previous">
                   <span aria-hidden="true">&laquo; Prev</span>
