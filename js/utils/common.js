@@ -14,7 +14,7 @@ export const setThumbnail = (parent, selector, thumbnail) => {
     element.src = thumbnail
 
     element.addEventListener('error', () =>{
-      element.src = "https://via.placeholder.com/1368x60?text=thumbnail"
+      element.src = `https://via.placeholder.com/1368x60?text=thumbnail`
     })
   }
   return

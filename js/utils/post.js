@@ -20,10 +20,17 @@ export const createElement = (post) => {
   setTextContent(liElement, '[data-id="author"]', post.author)
   setTextContent(liElement, '[data-id="timeSpan"]', `- ${dayjs(post.updatedAt).fromNow()}`)
 
+  const divElement = liElement.firstElementChild
+  if (divElement) {
+    divElement.addEventListener('click', (e) => {
+      window.location.assign(`/post-detail.html?id=${post.id}`)
+    })
+  }
+
   return liElement
 }
 
-export const renderPosts = ({data, elementId}) => {
+export const renderPosts = ({ data, elementId }) => {
   if (!Array.isArray(data)) return
 
   const ulElement = document.getElementById(elementId)

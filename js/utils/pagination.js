@@ -1,4 +1,4 @@
-export const renderPagination = ({pagination, elementId}) => {
+export const renderPagination = ({ pagination, elementId }) => {
   const ulPagination = document.querySelector(elementId)
   if (!pagination || !ulPagination) return
 
@@ -24,7 +24,6 @@ export const handleEvenPagination = ({ elementId, onchange }) => {
   if (prevLink) {
     prevLink.addEventListener('click', (e) => {
       e.preventDefault()
-      const ulPagination = document.querySelector(elementId)
       const page = Number.parseInt(ulPagination.dataset.page) || 1
       if (page <= 1) return
       onchange?.(page - 1)
@@ -35,7 +34,6 @@ export const handleEvenPagination = ({ elementId, onchange }) => {
   if (nextLink) {
     nextLink.addEventListener('click', (e) => {
       e.preventDefault()
-      const ulPagination = document.querySelector(elementId)
       const page = Number.parseInt(ulPagination.dataset.page) || 1
       const totalPages = Number.parseInt(ulPagination.dataset.totalPages)
       if (page >= totalPages) return
