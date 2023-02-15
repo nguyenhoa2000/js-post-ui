@@ -23,7 +23,16 @@ export const createElement = (post) => {
   const divElement = liElement.firstElementChild
   if (divElement) {
     divElement.addEventListener('click', (e) => {
+      const menu = liElement.querySelector('[data-id="menu"]')
+      if (menu && menu.contains(e.target)) return
       window.location.assign(`/post-detail.html?id=${post.id}`)
+    })
+  }
+
+  const editBtn = liElement.querySelector('[data-id="edit"]')
+  if (editBtn) {
+    editBtn.addEventListener('click', (e) => {
+      window.location.assign(`/add-edit-post.html`)
     })
   }
 

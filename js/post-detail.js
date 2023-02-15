@@ -19,12 +19,17 @@ const renderPostDetail = (post) => {
     Object.assign(heroImgDetail.style, {
       background: `url("${post.imageUrl}")`,
     })
+
+    heroImgDetail.addEventListener('error', (e) => {})
   }
 
   // render edit post
   const editLInk = document.getElementById('goToEditPageLink')
   if (editLInk) {
     editLInk.innerHTML = '<i class="fas fa-edit"></i> Edit post'
+    editLInk.addEventListener('click', () => {
+      window.location.assign(`/add-edit-post.html?id=${post.id}`)
+    })
   }
 }
 

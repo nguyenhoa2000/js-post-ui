@@ -13,7 +13,7 @@ export const setThumbnail = (parent, selector, thumbnail) => {
   if (element) {
     element.src = thumbnail
 
-    element.addEventListener('error', () =>{
+    element.addEventListener('error', () => {
       element.src = `https://via.placeholder.com/1368x60?text=thumbnail`
     })
   }
@@ -21,7 +21,21 @@ export const setThumbnail = (parent, selector, thumbnail) => {
 }
 
 export const handleLengText = (text, maxLength) => {
-  if(text.length <= maxLength) return text
-  return `${text.slice(0, maxLength -1)}…`
-
+  if (text.length <= maxLength) return text
+  return `${text.slice(0, maxLength - 1)}…`
 }
+
+export const setFieldValue = (form, selector, value) => {
+  if (!form) return
+
+  const field = form.querySelector(selector)
+  if (field) field.value = value
+  return
+}
+
+export const setBackgroudImg = (parent, selector, imgUrl) => {
+  if (!parent) return
+  const element = parent.querySelector(selector)
+  if (element) element.style.backgroundImage = `url("${imgUrl}")`
+}
+
