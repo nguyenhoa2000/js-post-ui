@@ -12,7 +12,7 @@ const handlePostFormSubmit = async (formValues) => {
     }, 2000)
   } catch (error) {
     console.log(error)
-    toast.error('update error')
+    toast.error(error.message)
   }
 }
 ;(async () => {

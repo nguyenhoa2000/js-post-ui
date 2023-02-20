@@ -99,14 +99,15 @@ export const initPostForm = ({ formId, defaultValue, onSubmit }) => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    if (sumitting) return
+    if (!sumitting) return
     showLoading(form)
     sumitting = true
 
     const formValues = getFormValues(form)
     formValues.id = defaultValue.id
-    const istrue = await validatePostForm(form, formValues)
-    if (!istrue) return
+    const isTrue = await validatePostForm(form, formValues)
+
+    if (!isTrue) return
     await onSubmit?.(formValues)
     hideLoading(form)
     sumitting = false
