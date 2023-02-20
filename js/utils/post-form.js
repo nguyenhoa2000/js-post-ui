@@ -9,7 +9,7 @@ const getPostSchema = () => {
       .test(
         '',
         'Please enter at least 3 words',
-        (value) => value.split(' ').filter((item) => item.length > 3).length > 2
+        (value) => value.split(' ').filter((item) => item.length >= 2).length > 2
       ),
     author: yup
       .string()
@@ -24,12 +24,12 @@ const getPostSchema = () => {
   })
 }
 
-const setFormValue = (form, formValue) => {
-  setFieldValue(form, '[name="title"]', formValue?.title)
-  setFieldValue(form, '[name="author"]', formValue?.author)
-  setFieldValue(form, '[name="description"]', formValue?.description)
-  setBackgroudImg(document, '#postHeroImage', formValue?.imageUrl)
-  setFieldValue(form, '[name="imgUrl"]', formValue?.imageUrl) // get url img (hiden)
+const setFormValue = (form, defaultValue) => {
+  setFieldValue(form, '[name="title"]', defaultValue?.title)
+  setFieldValue(form, '[name="author"]', defaultValue?.author)
+  setFieldValue(form, '[name="description"]', defaultValue?.description)
+  setBackgroudImg(document, '#postHeroImage', defaultValue?.imageUrl)
+  setFieldValue(form, '[name="imgUrl"]', defaultValue?.imageUrl) // get url img (hiden)
 }
 
 const getFormValues = (form) => {
@@ -61,8 +61,6 @@ const validatePostForm = async (form, formValues) => {
     const schema = getPostSchema()
     await schema.validate(formValues, { abortEarly: false })
   } catch (error) {
-    console.log(error.inner)
-
     const errorLog = {}
     for (const validationError of error.inner) {
       const name = validationError.path
@@ -81,11 +79,12 @@ export const initPostForm = ({ formId, defaultValue, onSubmit }) => {
   const form = document.getElementById(formId)
   setFormValue(form, defaultValue)
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const formValues = getFormValues(form)
-    console.log(formValues)
-
-    if (!validatePostForm(form, formValues)) return
+    formValues.id = defaultValue.id
+    const istrue = await validatePostForm(form, formValues)
+    if (!istrue) return
+    onSubmit?.(formValues)
   })
 }

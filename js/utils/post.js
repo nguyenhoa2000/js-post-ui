@@ -32,7 +32,7 @@ export const createElement = (post) => {
   const editBtn = liElement.querySelector('[data-id="edit"]')
   if (editBtn) {
     editBtn.addEventListener('click', (e) => {
-      window.location.assign(`/add-edit-post.html`)
+      window.location.assign(`/add-edit-post.html?id=${post.id}`)
     })
   }
 
