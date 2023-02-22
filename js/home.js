@@ -1,5 +1,4 @@
 import postApi from './api/postApi'
-
 import { handleEvenPagination, initSearch, renderPagination, renderPosts } from './utils'
 
 const handleFilterChange = async (filterName, filterValue) => {

@@ -19,8 +19,6 @@ const renderPostDetail = (post) => {
     Object.assign(heroImgDetail.style, {
       background: `url("${post.imageUrl}")`,
     })
-
-    heroImgDetail.addEventListener('error', (e) => {})
   }
 
   // render edit post

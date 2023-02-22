@@ -6,7 +6,7 @@ const handlePostFormSubmit = async (formValues) => {
     let savePost = formValues.id
       ? await postApi.updateData(formValues)
       : await postApi.addData(formValues)
-      toast.success('update successly')
+    toast.success('update successly')
     setTimeout(() => {
       window.location.assign(`/post-detail.html?id=${savePost.id}`)
     }, 2000)
