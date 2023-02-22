@@ -104,6 +104,18 @@ const initRandomImg = (form) => {
   })
 }
 
+const initUploadImg = (form) => {
+  const uploadImg = form.querySelector('[name="image"]')
+  if (!uploadImg) return
+  uploadImg.addEventListener('change', (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const urlImage = URL.createObjectURL(file)
+      setBackgroudImg(document, '#postHeroImage', urlImage)
+    }
+  })
+}
+
 const renderImgSourseControl = (form, selectorValue) => {
   const controlList = form.querySelectorAll('[data-id="imageSourse"]')
   controlList.forEach((control) => {
@@ -126,6 +138,7 @@ export const initPostForm = ({ formId, defaultValue, onSubmit }) => {
 
   initRandomImg(form)
   initRadioImgSourse(form)
+  initUploadImg(form)
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
     if (sumitting) return
