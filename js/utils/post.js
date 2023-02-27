@@ -35,7 +35,16 @@ export const createElement = (post) => {
       window.location.assign(`/add-edit-post.html?id=${post.id}`)
     })
   }
-
+  const removeBtn = liElement.querySelector('[data-id="remove"]')
+  if(removeBtn) {
+    removeBtn.addEventListener('click', (e) => {
+      const removeEvent = new CustomEvent('removePost', {
+        bubbles: true,
+        detail: post
+      })
+      removeBtn.dispatchEvent(removeEvent)
+    })
+  }
   return liElement
 }
 

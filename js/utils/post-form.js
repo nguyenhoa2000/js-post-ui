@@ -1,5 +1,9 @@
 import { setFieldValue, setBackgroudImg, setTextContent, randomNumber } from './common'
 import * as yup from 'yup'
+const ImageSourse = {
+  PICSUM: 'picsum',
+  UPLOAD: 'upload',
+}
 
 const getPostSchema = () => {
   return yup.object().shape({
@@ -21,7 +25,31 @@ const getPostSchema = () => {
           value.split(' ').reduce((accumulator, item) => accumulator + item, '').length > 10
       ),
     description: yup.string(),
-    imageUrl: yup.string().required('please random img').url('plese enter a valid url'),
+    imgSourse: yup
+      .string()
+      .required('please select image soure')
+      .oneOf([ImageSourse.PICSUM, ImageSourse.UPLOAD], 'please select correct value'),
+
+    imageUrl: yup.string().when('imgSourse', {
+      is: ImageSourse.PICSUM,
+      then: () => yup.string().required('please random img').url('plese enter a valid url'),
+    }),
+
+    image: yup.mixed().when('imgSourse', {
+      is: ImageSourse.UPLOAD,
+      then: () =>
+        yup
+          .mixed()
+          .test('', 'please upload image', (file) => {
+            if (!file?.name) return false
+            else return true
+          })
+          .test('max-Size', 'please select an image <= 10mb', (file) => {
+            const fileSize = file?.size || 0
+            const MAX_SIZE = 10 * 1024 * 1024 // 10 mb
+            return fileSize <= MAX_SIZE
+          }),
+    }),
   })
 }
 
@@ -45,6 +73,7 @@ const getFormValues = (form) => {
   for (const [key, value] of data) {
     formValues[key] = value
   }
+
   return formValues
 }
 
@@ -58,22 +87,38 @@ const setFieldError = (form, name, error) => {
 
 const validatePostForm = async (form, formValues) => {
   try {
-    ;['title', 'author', 'imageUrl'].forEach((name) => setFieldError(form, name, ''))
+    ;['title', 'author', 'imageUrl', 'image'].forEach((name) => setFieldError(form, name, ''))
     const schema = getPostSchema()
     await schema.validate(formValues, { abortEarly: false })
   } catch (error) {
     const errorLog = {}
-    for (const validationError of error.inner) {
-      const name = validationError.path
-      if (errorLog[name]) continue
-      setFieldError(form, name, validationError.message)
-      errorLog[name] = true
+    if (error.name === 'ValidationError') {
+      for (const validationError of error.inner) {
+        const name = validationError.path
+        if (errorLog[name]) continue
+        setFieldError(form, name, validationError.message)
+        errorLog[name] = true
+      }
     }
   }
 
   const ivalid = form.checkValidity()
   if (!ivalid) form.classList.add('was-validated')
   return ivalid
+}
+
+const validateFormField = async (form, formValue, name) => {
+  try {
+    setFieldError(form, name, '')
+    const schema = getPostSchema()
+    await schema.validateAt(name, formValue)
+  } catch (error) {
+    setFieldError(form, name, error.message)
+  }
+  const field = form.querySelector(`[name="${name}"]`)
+  if (field && field.checkValidity()) {
+    field.parentElement.classList.add('was-validated')
+  }
 }
 
 const showLoading = (form) => {
@@ -112,6 +157,26 @@ const initUploadImg = (form) => {
     if (file) {
       const urlImage = URL.createObjectURL(file)
       setBackgroudImg(document, '#postHeroImage', urlImage)
+      validateFormField(
+        form,
+        {
+          imageSource: ImageSourse.UPLOAD,
+          image: file,
+        },
+        'image'
+      )
+    }
+  })
+}
+
+const initValidationOnChange = (form) => {
+  ;['title', 'author'].forEach((name) => {
+    const field = form.querySelector(`[name="${name}"]`)
+    if (field) {
+      field.addEventListener('input', (e) => {
+        const newValue = e.target.value
+        validateFormField(form, { [name]: newValue }, name)
+      })
     }
   })
 }
@@ -139,6 +204,7 @@ export const initPostForm = ({ formId, defaultValue, onSubmit }) => {
   initRandomImg(form)
   initRadioImgSourse(form)
   initUploadImg(form)
+  initValidationOnChange(form)
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
     if (sumitting) return
@@ -146,6 +212,7 @@ export const initPostForm = ({ formId, defaultValue, onSubmit }) => {
     sumitting = true
 
     const formValues = getFormValues(form)
+
     formValues.id = defaultValue.id
     const isTrue = await validatePostForm(form, formValues)
 

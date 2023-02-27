@@ -1,10 +1,10 @@
 import postApi from './api/postApi'
-import { handleEvenPagination, initSearch, renderPagination, renderPosts } from './utils'
+import { handleEvenPagination, initSearch, renderPagination, renderPosts, toast } from './utils'
 
 const handleFilterChange = async (filterName, filterValue) => {
   try {
     const url = new URL(window.location) // get url
-    url.searchParams.set(filterName, filterValue) //set params
+    if (filterName) url.searchParams.set(filterName, filterValue) //set params
     if (filterName === 'title_like') url.searchParams.set('_page', 1)
 
     window.history.pushState({}, '', url)
@@ -29,8 +29,27 @@ const initUrl = () => {
   return url.searchParams
 }
 
+const handleDeletePost = () => {
+  document.addEventListener('removePost', async (e) => {
+    try {
+      const post = e.detail
+      const message = 'Are you sure delete this post'
+      if(window.confirm(message)) {
+        await postApi.removeData(post.id)
+        await handleFilterChange()
+        toast.success('delete post successfully')
+      }
+     
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  })
+}
+
 ;(async () => {
   const queryParams = initUrl()
+  handleDeletePost()
   handleEvenPagination({
     elementId: '#postsPagination',
     defaultParams: queryParams,
